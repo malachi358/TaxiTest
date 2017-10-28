@@ -9,8 +9,8 @@ var drivers = require("./routes/drivers");
 
 var app = express();
 
-var port = 3000;
-
+//var port = 3000;
+var port = process.env.PORT || 8080;
 
 //temp
 //app.listen(port, function(){
