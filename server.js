@@ -1,44 +1,55 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var Pusher = require('pusher');
+var express = require("express");
+var path = require("path");
+var bodyParser = require("body-parser");
+
+var index = require("./routes/index");
+var bookings = require("./routes/bookings");
+var driverLocation = require("./routes/driverLocation");
+var drivers = require("./routes/drivers");
 
 var app = express();
+
+var port = 3000;
+
+
+//temp
+//app.listen(port, function(){
+//	console.log("Server running on port", port);
+//});
+//temp
+
+var socket_io = require("socket.io");
+
+var io = socket_io();
+
+
+io.listen(app.listen(port, function(){
+	console.log("Server running on port", port);
+}));
+
+//views
+
+app.set("views",  path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.engine("html", require("ejs").renderFile);
+
+//Body parser MW
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended:true}));
 
-var pusher = new Pusher({ 
-  appId: process.env.APP_ID, 
-  key: process.env.APP_KEY, 
-  secret:  process.env.APP_SECRET,
-  cluster: process.env.APP_CLUSTER,
-});
 
-app.get('/', function(req, res){
-	res.send('all is well...');
-});
+//Routes
 
-app.get("/pusher/auth", function(req, res) {
-  var query = req.query;
-  var socketId = query.socket_id;
-  var channel = query.channel_name;
-  var callback = query.callback;
+app.use("/", index);
+app.use("/api", bookings);
+//app.use("/api", driverLocation);
+//app.use("/api", drivers);
 
-  var auth = JSON.stringify(pusher.authenticate(socketId, channel));
-  var cb = callback.replace(/\"/g,"") + "(" + auth + ");";
+//io.listen(app.listen(port, function(){
+//	console.log("Server running on port", port);
+//}));
 
-  res.set({
-    "Content-Type": "application/javascript"
-  });
-
-  res.send(cb);
-});
-
-app.post('/pusher/auth', function(req, res) {
-  var socketId = req.body.socket_id;
-  var channel = req.body.channel_name;
-  var auth = pusher.authenticate(socketId, channel);
-  res.send(auth);
-});
-
-var port = process.env.PORT || 5000;
-app.listen(port);
+//app.io = io.on("connection", function(socket){
+//	console.log("Socket connected: " + socket.id);
+//});
