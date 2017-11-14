@@ -1,0 +1,20 @@
+var theTrucks = [
+	{
+		"company": "Fast Movers",
+		"city": "Fresno",
+		"truckCount": "6"
+	},
+
+	{
+		"company": "Great Moving",
+		"city": "Sacramento",
+		"truckCount": "4",
+	},
+
+	{
+		"company": "Super Movers",
+		"city": "Modesto",
+		"truckCount": "12"
+	}
+
+]
