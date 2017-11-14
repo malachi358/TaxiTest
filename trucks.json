@@ -16,5 +16,4 @@ var theTrucks = [
 		"city": "Modesto",
 		"truckCount": "12"
 	}
-
 ]
